@@ -17,7 +17,7 @@ module.exports = {
         // primary:"#2A4BA0",
         scondary:"#D7FFD4",
         neutral:"#F6F6F6",
-        "meuted":"#A1A1AB"
+        meuted:"#A1A1AB"
       }
     },
   },

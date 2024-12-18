@@ -1,3 +1,6 @@
+import { SvgProps } from "react-native-svg";
+
+
 export type Card = {
     active?:boolean
     id: string; 
@@ -59,3 +62,10 @@ export type Address = {
   | 'cancelled';
 
 
+export type Icon={
+  color?: string;
+  fill?: string;
+  size?: number;
+  strockColor?:string;
+  className?: string;
+}

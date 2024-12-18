@@ -22,7 +22,7 @@ export default function RootLayout() {
       <BottomSheetModalProvider>
         <AppProvider>
           <Stack >
-            <Stack.Screen name="add-card" options={{ headerShown: false, animation: "slide_from_right" }} />
+
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="search" options={{ headerShown: false, animation: "slide_from_left" }} />
             <Stack.Screen name="cart" options={{ headerShown: false, animation: "ios_from_right", presentation: "modal" }} />
@@ -35,8 +35,8 @@ export default function RootLayout() {
             <Stack.Screen name="checkout" options={{ headerShown: false, animation: "slide_from_right" }} />
             <Stack.Screen name="payement" options={{ headerShown: false, animation: "slide_from_right" }} />
             <Stack.Screen name="orders" options={{ headerShown: false, animation: "slide_from_right" }} />
-          
-
+            <Stack.Screen name="add-card" options={{ headerShown: false, animation: "slide_from_right" }} />
+            <Stack.Screen name="edit-profile" options={{ headerShown: false, animation: "slide_from_right" }} />
           </Stack>
           <StatusBar style="auto" />
         </AppProvider>

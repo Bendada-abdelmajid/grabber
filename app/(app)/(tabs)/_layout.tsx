@@ -1,16 +1,19 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import TabBar from '@/components/tab-bar';
+import { Dimensions, View } from 'react-native';
+import Bar from '@/components/bar';
+
 
 
 export default function TabLayout() {
 
-
+const {height, width}= Dimensions.get("window")
   return (
-    <Tabs safeAreaInsets={{ left: 100 }} tabBar={(props) => <TabBar {...props} />}
+  
+    <Tabs  tabBar={(props) => <Bar />}
       screenOptions={{
         headerShown: false,
-        animation: "shift",
       }}>
       <Tabs.Screen
         name="index"
@@ -20,14 +23,17 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="favorite"
+
         options={{
           title: 'Favorite',
+          animation:"fade",
+          popToTopOnBlur:true
         }}
       />
       <Tabs.Screen
         name="categorys"
         options={{
-          title: 'Categorys',
+          title: 'Shop',
         }}
       />
       <Tabs.Screen

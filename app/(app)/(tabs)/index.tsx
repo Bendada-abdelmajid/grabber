@@ -76,10 +76,10 @@ export default function HomeScreen() {
             </Pressable>
           </View>
           <FlatList className='w-full' data={products}
-            contentContainerStyle={{ paddingHorizontal: 20, gap: 25 }}
+            contentContainerStyle={{ paddingHorizontal: 20, gap: 15 }}
             numColumns={2}
 
-            columnWrapperStyle={{ gap: 20 }}
+            columnWrapperStyle={{ gap: 15 }}
             scrollEnabled={false}
             keyExtractor={(item) => item.id}
             renderItem={({ item, index }) => <ProductCard item={item} index={index} />}

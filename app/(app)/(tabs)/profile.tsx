@@ -1,20 +1,18 @@
-import { View, Text, Pressable, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, Pressable, TouchableOpacity } from 'react-native'
 import React, { useCallback, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { StatusBar } from 'expo-status-bar'
+
 import { Image } from 'react-native'
-import { LinearGradient } from 'expo-linear-gradient'
-import { Camera, ChevronRight, CreditCard, FileText, HelpCircle, ImageIcon, Lock, LogOut, LucideIcon, Package, Shield, Trash2, UserPen } from 'lucide-react-native'
+
+import { Camera, ChevronRight, CreditCard, FileText, HelpCircle, ImageIcon, Lock, LogOut, LucideIcon, MapPinHouse, Package, Shield, Trash2, UserPen } from 'lucide-react-native'
 import { Link, Route } from 'expo-router'
 import auth, { getAuth, updateProfile } from '@react-native-firebase/auth';
-import LogoutSheet from '@/components/logout-sheet'
-import { useSharedValue } from 'react-native-reanimated'
+
 import { useAppContext } from '@/hooks/app-context'
 import * as ImagePicker from "expo-image-picker";
 import * as Crypto from 'expo-crypto';
 import {
   BottomSheetBackdrop,
-  BottomSheetFlatList,
   BottomSheetModal,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
@@ -32,20 +30,27 @@ const links: linkType[] = [
   //   label: "Edit Profile",
   //   url: "/profile/edit",
   // },
+
   {
-    Icon: Lock,
-    label: "Change Password",
-    url: "/change-password",
+    Icon: Package,
+    label: "My Orders",
+    url: "/orders",
   },
+
   {
     Icon: CreditCard,
     label: "Payment Methods",
     url: "/credit-cards",
   },
   {
-    Icon: Package,
-    label: "My Orders",
-    url: "/orders",
+    Icon: MapPinHouse,
+    label: "Addresses",
+    url: "/address",
+  },
+  {
+    Icon: Lock,
+    label: "Change Password",
+    url: "/change-password",
   },
   {
     Icon: Shield,
@@ -68,7 +73,8 @@ const links: linkType[] = [
 
 const profile = () => {
 
-  const { toggleSheet } = useAppContext()
+  const [open, setOpen] = useState<"Image" | "Logout">("Image")
+
 
   const user = auth().currentUser;
   const [img, setImg] = useState<String | null>(user?.photoURL || null)
@@ -81,8 +87,10 @@ const profile = () => {
   const dismiss = useCallback(() => {
     bottomSheetModalRef.current?.dismiss();
   }, []);
-  const handlePresentModalPress = useCallback(() => {
+  const openModale = useCallback((type: "Image" | "Logout") => {
+    setOpen(type)
     bottomSheetModalRef.current?.present();
+
   }, []);
   const renderBackdrop = useCallback(
     (props: any) => (
@@ -99,49 +107,52 @@ const profile = () => {
     <>
 
       <SafeAreaView className='flex-1 bg-white'>
-        <ScrollView scrollEventThrottle={16} bounces={false} overScrollMode='never' showsVerticalScrollIndicator={false} className='flex-1' contentContainerStyle={{ paddingBottom: 80, paddingTop: 24, paddingHorizontal: 20 }}>
-          <View className='flex-1'>
-            <Pressable onPress={toggleSheet} className='flex-row items-center gap-1.5 py-2 px-4 rounded-3xl bg-neutral ml-auto'>
-              <LogOut size={16} strokeWidth={1.3} color={"#dc2626"} />
+        <View className='flex-1'>
+          <Pressable onPress={() => openModale("Logout")} className='absolute z-10 top-5 right-5 flex-row items-center gap-1.5 py-2 px-4 rounded-3xl bg-neutral ml-auto'>
+            <LogOut size={16} strokeWidth={1.3} color={"#dc2626"} />
 
-              <Text className='text-sm '>LogOut</Text>
+            <Text className='text-sm '>LogOut</Text>
 
-            </Pressable>
-            <View className='pt-1 pb-5  gap-5  items-center'>
-              <View ><Image className='size-32 border border-neutral bg-white shadow-2xl rounded-full object-cover' resizeMode='cover' source={img ? { uri: img } : require("@/assets/images/profile.png")} />
-                <Pressable onPress={handlePresentModalPress} className='absolute bottom-0 right-0 size-10 bg-neutral rounded-full items-center justify-center'>
-                  <Camera size={20} color={"#111"} />
-                </Pressable>
+          </Pressable>
+          <ScrollView bounces={false} overScrollMode='never' showsVerticalScrollIndicator={false} className='flex-1' contentContainerStyle={{ paddingBottom: 80, paddingTop: 40, paddingHorizontal: 20 }}>
+            <View className='flex-1'>
+
+              <View className='pb-5 pt-2 gap-3  items-center'>
+                <View ><Image className='size-32 border border-neutral bg-white shadow-2xl rounded-full object-cover' resizeMode='cover' source={img ? { uri: img } : require("@/assets/images/profile.png")} />
+                  <Pressable onPress={() => openModale("Image")} className='absolute bottom-0 right-0 size-10 bg-black border-2 border-white rounded-full items-center justify-center'>
+                    <Camera size={20} color={"#fff"} />
+                  </Pressable>
+                </View>
+                <View className=''>
+                  <Text className=' text-xl text-center capitalize font-semibold ' numberOfLines={1} adjustsFontSizeToFit>{user?.displayName}</Text>
+                  <Text className=' mt-1 text-center text-meuted'>{user?.email}</Text>
+                </View>
+
               </View>
-              <View className=''>
-                <Text className=' text-xl text-center capitalize font-semibold ' numberOfLines={1} adjustsFontSizeToFit>{user?.displayName}</Text>
-                <Text className=' mt-1 text-center text-meuted'>{user?.email}</Text>
-              </View>
+              <View className='h-0.5 w-4/5 mt-2 mb-5 bg-gray-100 mx-auto' />
 
-            </View>
-            <View className='h-0.5 w-4/5 mt-2 mb-7 bg-gray-50 mx-auto' />
+              {links.slice(0, 4).map(({ url, label, Icon }) => (
+                <Link href={url as Route} key={url} >
+                  <View className='px-0.5 py-2  flex-row items-center gap-5 rounded-lg mb-2'>
+                    <View className='bg-neutral rounded-lg size-12 justify-center items-center'>
+                      <Icon size={24} color={"#222"} />
+                    </View>
 
-            {links.slice(0, 3).map(({ url, label, Icon }) => (
-              <Link href={url as Route} key={url} >
-                <View className='px-0.5 py-2  flex-row items-center gap-5 rounded-lg mb-2'>
-                  <View className='bg-neutral rounded-lg size-12 justify-center items-center'>
-                    <Icon size={24} color={"#222"} />
-                  </View>
-
+                    <Text className='text-xl flex-1'>{label}</Text>
+                    <ChevronRight size={20} color={"#222"} /></View>
+                </Link>
+              ))}
+              <View className='h-0.5 w-4/5 my-5 bg-gray-100 mx-auto' />
+              {links.slice(4, 7).map(({ url, label, Icon }) => (
+                <View key={url} className='px-0.5 py-1 flex flex-row items-center gap-5 rounded-lg mb-2'>
+                  <View className='bg-neutral/70 rounded-lg size-12 justify-center items-center'>
+                    <Icon size={24} color={"#222"} /></View>
                   <Text className='text-xl flex-1'>{label}</Text>
-                  <ChevronRight size={20} color={"#222"} /></View>
-              </Link>
-            ))}
-            <View className='h-0.5 w-4/5 my-7 bg-gray-50 mx-auto' />
-            {links.slice(3, 6).map(({ url, label, Icon }) => (
-              <View key={url} className='px-0.5 py-1 flex flex-row items-center gap-5 rounded-lg mb-2'>
-                <View className='bg-neutral/70 rounded-lg size-12 justify-center items-center'>
-                  <Icon size={24} color={"#222"} /></View>
-                <Text className='text-xl flex-1'>{label}</Text>
-                <ChevronRight size={20} color={"#222"} />
-              </View>
-            ))}</View>
-        </ScrollView>
+                  <ChevronRight size={20} color={"#222"} />
+                </View>
+              ))}</View>
+          </ScrollView>
+        </View>
       </SafeAreaView>
       <BottomSheetModal
         backdropComponent={renderBackdrop}
@@ -160,11 +171,22 @@ const profile = () => {
         ref={bottomSheetModalRef}
       >
         <BottomSheetView style={{ flex: 1 }}>
-          <UpdateImage setImg={setImg} />
+          {open == "Logout" ? <View className='px-6 pt-3'>
+            <Text className='text-3xl font-semibold text-center font-600' >Logout</Text>
+            <Text className='text-lg   mt-1 text-center font-400'>Are you sure you want to log out?</Text>
+            <View className='flex-row gap-4 px-4 mt-6'>
+              <Pressable onPress={dismiss} className="bg-neutral  flex-1 py-4 rounded-[40px] ">
+                <Text style={{ fontFamily: "Manrope_500Medium" }} className="text-center ">Cancel</Text>
+              </Pressable>
+              <Pressable onPress={logout} className="bg-red-700 flex-1 py-4 rounded-[40px] ">
+                <Text style={{ fontFamily: "Manrope_500Medium" }} className="text-white text-center">Yes, Logout</Text>
+              </Pressable>
+            </View>
+          </View>
+            : <UpdateImage dismiss={dismiss} setImg={setImg} />}
         </BottomSheetView>
       </BottomSheetModal>
 
-      {/* </LinearGradient> */}
     </>
   )
 }
@@ -172,7 +194,7 @@ const profile = () => {
 export default profile
 
 
-const UpdateImage = ({ setImg }: { setImg: (e: string | null) => void }) => {
+const UpdateImage = ({ setImg, dismiss }: { setImg: (e: string | null) => void, dismiss: () => void }) => {
   const { currentUser } = getAuth();
 
   const takePhoto = async () => {
@@ -214,6 +236,7 @@ const UpdateImage = ({ setImg }: { setImg: (e: string | null) => void }) => {
       }
 
       const body = new FormData();
+
       body.append("file", file);
       body.append("upload_preset", upload_preset || "");
 
@@ -239,6 +262,8 @@ const UpdateImage = ({ setImg }: { setImg: (e: string | null) => void }) => {
       console.log("Uploaded image URL:", image.url);
     } catch (error) {
       console.error("Error uploading photo:", error);
+    } finally {
+      dismiss()
     }
   };
 
@@ -300,6 +325,8 @@ const UpdateImage = ({ setImg }: { setImg: (e: string | null) => void }) => {
     catch (error) {
       console.log("Error uploading photo:", error);
 
+    } finally {
+      dismiss()
     }
   }
 

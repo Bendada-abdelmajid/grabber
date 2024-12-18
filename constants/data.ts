@@ -3,16 +3,19 @@ import { ImageSourcePropType } from "react-native";
 export type Cat = {
   title: string;
   img: ImageSourcePropType;
+  backgroundColor:string;
 };
 export const cats: Cat[] = [
-  { title: "Fruits", img: require("@/assets/images/appel.png") },
-  { title: "Vegetables", img: require("@/assets/images/carrot.png")},
-  { title: "Dairy", img: require("@/assets/images/beverages.png")},
-  { title: "Bakery", img: require("@/assets/images/bakery.png") },
-  { title: "Beverages", img: require("@/assets/images/soda.png") },
-  { title: "Snacks", img: require("@/assets/images/snakes.png") },
-  { title: "Laundry", img: require("@/assets/images/laundry.png") },
+  { title: "Vegetables", img: require("@/assets/images/carrot.png"), backgroundColor: "#E8F5E9" }, // Light green
+  { title: "Fruits", img: require("@/assets/images/appel.png"), backgroundColor: "#FFEBEE" }, // Light red
+
+  { title: "Dairy", img: require("@/assets/images/beverages.png"), backgroundColor: "#E3F2FD" }, // Light blue
+  { title: "Bakery", img: require("@/assets/images/bakery.png"), backgroundColor: "#FFF3E0" }, // Light orange
+  { title: "Beverages", img: require("@/assets/images/soda.png"), backgroundColor: "#F3E5F5" }, // Light purple
+  { title: "Snacks", img: require("@/assets/images/snakes.png"), backgroundColor: "#FFFDE7" }, // Light yellow
+  { title: "Laundry", img: require("@/assets/images/laundry.png"), backgroundColor: "#ECEFF1" }, // Light grey
 ];
+
 export type Product = {
   id: string;
   title: string;
