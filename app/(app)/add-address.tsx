@@ -78,7 +78,7 @@ const AddressForm = () => {
             <SafeAreaView className='bg-white pt-5 py-7 flex-1 px-5'>
                 <View className="flex-row items-center gap-5 ">
                     <BackBtn />
-                    <Text className="text-2xl">{id ? "Update" : "Add"} Card</Text>
+                    <Text className="text-2xl">{id ? "Update" : "Add"} Address</Text>
                 </View>
 
 

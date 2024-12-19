@@ -18,42 +18,42 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function TabTwoScreen() {
   const { favorites } = useAppContext()
   const [loading, setLoading] = useState(true)
-  const filters = ["all", ...cats.map(el => el.title)]
+  const uniqueCategories = [...new Set(favorites.map(product => product.category))];
+  const filters = ["all", ...uniqueCategories]
   const [active, setActive] = useState("all");
   useEffect(() => {
     setLoading(false)
   }, [])
 
   return (
-    <PageWrapper >
-      {/* <View className='absolute top-0 left-0 right-0 h-40 bg-neutral' /> */}
-      <View className='flex-1 px-5 '>
-        {/* <View className='flex-row mt-5  items-center justify-between'>
-          <Text className='text-3xl font-500 font-medium'>Wishlist</Text>
-          <CartBtn />
-        </View> */}
-        <View className='bg-neutral mt-7 px-4 h-14 flex-row items-center rounded-[40px]'>
-          <SearchIcon color={"#A1A1AB"} size={20} />
-          <Text className=' text-meuted pl-2  font-300 font-light flex-1'>Search</Text>
-        </View>
+    <>
+
+      <PageWrapper >
+  
+        <View className='flex-1  '>
+       
 
 
-        {/* <FlatList showsHorizontalScrollIndicator={false} bounces={false} overScrollMode='never' className='w-full mt-5 flex-1' data={filters}
-          contentContainerStyle={{ paddingHorizontal: 20, gap: 10 }}
-          horizontal
-          keyExtractor={(item) => "filter-" + item}
-          renderItem={({ item, index }) => <FilterBtn el={item} active={active} setActive={setActive} />}
-        /> */}
-        <FlatList showsVerticalScrollIndicator={false} bounces={false} overScrollMode='never' className='w-full mt-10' data={favorites}
-          contentContainerStyle={{ paddingBottom: 100, gap: 25 }}
-          numColumns={2}
-          scrollEnabled={false}
-          columnWrapperStyle={{ gap: 20 }}
+          <FlatList showsHorizontalScrollIndicator={false} bounces={false} overScrollMode='never' className='w-full mt-5 flex-1' data={filters}
+            contentContainerStyle={{ paddingHorizontal: 20, gap: 10 }}
+            horizontal
+            keyExtractor={(item) => "filter-" + item}
+            renderItem={({ item, index }) => <FilterBtn el={item} active={active} setActive={setActive} />}
+          />
+          <FlatList showsVerticalScrollIndicator={false} bounces={false} overScrollMode='never' className='w-full px-5 mt-7' data={favorites}
+            contentContainerStyle={{ gap: 15 }}
+            numColumns={2}
+            scrollEnabled={false}
+            columnWrapperStyle={{ gap: 15 }}
 
-          keyExtractor={(item) => item.id}
-          renderItem={({ item, index }) => <ProductCard index={index} item={item} />}
-        />
-      </View></PageWrapper>
+            keyExtractor={(item) => item.id}
+            renderItem={({ item, index }) => <ProductCard index={index} item={item} />}
+          />
+        </View></PageWrapper>
+      <Pressable className='py-3.5 w-[90%] border  rounded-[40px]  left-[5%] absolute bottom-24 bg-white'>
+        <Text className='text-center text-xl font-500 font-medium tracking-wider'>Add All ({favorites.length})</Text>
+      </Pressable>
+    </>
   );
 }
 type CardProp = {
@@ -83,7 +83,7 @@ const FilterBtn = ({ active, el, setActive }: FilterBtnType) => {
       backgroundColor: interpolateColor(
         activeValue.value,
         [0, 1],
-        ["transparent", "#4aa556"]
+        ["#0000", "#111"]
       )
     }
   })
@@ -95,11 +95,11 @@ const FilterBtn = ({ active, el, setActive }: FilterBtnType) => {
     >
       <Animated.View style={btnAnimation}
         // animate={{ backgroundColor: active == el ? "#4aa556" : "#fff", opacity: active == el ? 1 : .6, }}
-        className="py-1.5 px-6  w-full rounded-[40px]"
+        className="py-2 px-4 border   w-full rounded-[40px]"
       >
         <Text
           style={{ color: active == el ? "#fff" : "#333" }}
-          className="text-center capitalize text-lg  font-500"
+          className="text-center capitalize font-500"
         >
           {el}
         </Text>

@@ -52,7 +52,7 @@ const ProductCard = ({ item }: Props) => {
     return (
         <View
 
-            className="flex-1 bg-neutral rounded-xl overflow-hidden"
+            className="flex-1 bg-[#fafaf9] rounded-xl overflow-hidden"
         >
             <Pressable
                 onPress={navigate}
@@ -70,8 +70,9 @@ const ProductCard = ({ item }: Props) => {
                 >
                     <HeartIcon
                         size={24}
-                        fill={isFavorite ? "#4aa556" : "transparent"}
-                        strockColor={"#4aa556"}
+                        fill={isFavorite ? "#4aa556" : "#0000"}
+                        strockColor={isFavorite ?"#4aa556":"#d1d5db"}
+                        color={isFavorite ?"#fff":"#e5e7eb"}
                     />
                 </Pressable>
                 <Animated.View

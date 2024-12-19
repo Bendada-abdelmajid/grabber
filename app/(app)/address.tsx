@@ -1,34 +1,28 @@
 import { View, Text, FlatList, Pressable } from "react-native";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect} from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackBtn from "@/components/back-btn";
 import { useAppContext } from "@/hooks/app-context";
-import { Address, Card } from "@/libs/types";
+import { Address } from "@/libs/types";
 import { Check, CirclePlus } from "lucide-react-native";
-import Animated, { interpolate, interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
+import Animated, {  interpolateColor, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { Link, useRouter } from "expo-router";
 import firestore from '@react-native-firebase/firestore';
-import BottomSheet from "@/components/bottom-sheet";
-import AddressForm from "@/components/adress-form";
-import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
+import EmptySate from "@/components/empty-state";
+
 
 const AddressPage = () => {
     const { user } = useAppContext();
-    const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-    const handlePresentModalPress = useCallback(() => {
-        bottomSheetModalRef.current?.present();
-    }, []);
-    const handleSheetChanges = useCallback((index: number) => {
-        console.log('handleSheetChanges', index);
-    }, []);
+
     return (
         <>
             <SafeAreaView className="flex-1 bg-white pt-5 pb-10 ">
+             
                 <View className="flex-row items-center gap-5 px-5 mb-10">
                     <BackBtn />
-                    <Text className="text-2xl">Address</Text>
+                    <Text className="text-2xl">Addresses</Text>
                 </View>
-                <FlatList className="flex-1" contentContainerStyle={{ gap: 20 }}
+                {!user.addresses ? <><FlatList className="flex-1" contentContainerStyle={{ gap: 20 }}
                     showsVerticalScrollIndicator={false}
                     bounces={false}
                     overScrollMode="never"
@@ -41,14 +35,16 @@ const AddressPage = () => {
                     <Text className="text-xl text-center font-500 font-medium text-primary ">Add Address</Text>
                 </View>
                 </Link>
+                </>
+                :<EmptySate className="mb-10"
+                title="No Addresses Found"
+                description="Please check for location permission"
+                imageSource={require("@/assets/images/emptys/address.jpg")}
+                buttonText="Add Address"
+                url="/add-address"
+              />}
             </SafeAreaView>
-            <BottomSheetModal
-                ref={bottomSheetModalRef}
-                onChange={handleSheetChanges}
-            ><BottomSheetView style={{flex:1}}> 
-                <AddressForm />
-                </BottomSheetView>
-            </BottomSheetModal>
+      
         </>
     );
 };
