@@ -51,7 +51,7 @@ const ProductCard = ({ item }: Props) => {
     };
     return (
         <View
-
+           style={{minWidth:(width/2)-50, maxWidth:(width/2)-20}}
             className="flex-1 bg-[#fafaf9] rounded-xl overflow-hidden"
         >
             <Pressable

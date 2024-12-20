@@ -21,7 +21,7 @@ export default function RootLayout() {
     <GestureHandlerRootView>
       <BottomSheetModalProvider>
         <AppProvider>
-          <Stack >
+          <Stack screenOptions={{navigationBarColor:"#000"}}>
 
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="search" options={{ headerShown: false, animation: "slide_from_left" }} />

@@ -26,7 +26,7 @@ export default function TabTwoScreen() {
   }, [])
 
   return (
-    <>
+    <> 
 
       <PageWrapper >
   
